@@ -22,8 +22,8 @@ async function handler(req, res) {
       industry = "",
       location = "",
       companySize = "",
-      _sort = "name",
-      _order = "asc",
+      _sort = "",
+      _order = "",
     } = req.query;
 
     if (q) {

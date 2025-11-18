@@ -25,6 +25,10 @@ const CompaniesGridView = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
+  useEffect(() => {
+    setPage(1);
+  }, [searchedItems]);
+
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * pageSize;
     return searchedItems.slice(start, start + pageSize);
