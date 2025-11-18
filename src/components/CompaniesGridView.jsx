@@ -32,10 +32,7 @@ const CompaniesGridView = () => {
     return allItems.filter((c) => {
       return (
         c.name.toLowerCase().includes(search) ||
-        c.location.toLowerCase().includes(search) ||
-        c.industry.toLowerCase().includes(search) ||
-        c.companySize.toLowerCase().includes(search) ||
-        c.description.toLowerCase().includes(search)
+        c.location.toLowerCase().includes(search)
       );
     });
   }, [q, allItems, items]);
