@@ -5,6 +5,7 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
   items: [],
+  allItems: [],
   loading: false,
   error: null,
 };
@@ -18,6 +19,9 @@ const companiesSlice = createSlice({
     },
     setItems: (state, action) => {
       state.items = action.payload;
+    },
+    setAllItems: (state, action) => {
+      state.allItems = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -34,6 +38,8 @@ export const fetchCompanies = (params) => async (dispatch) => {
     });
 
     dispatch(setItems(response.data));
+
+    dispatch(setAllItems(response.data));
   } catch (err) {
     dispatch(setError(err.message));
   } finally {
@@ -41,5 +47,7 @@ export const fetchCompanies = (params) => async (dispatch) => {
   }
 };
 
-export const { setLoading, setItems, setError } = companiesSlice.actions;
+export const { setLoading, setItems, setAllItems, setError } =
+  companiesSlice.actions;
+
 export default companiesSlice.reducer;

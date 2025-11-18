@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Grid,
   Typography,
@@ -12,22 +12,33 @@ import { useSelector } from "react-redux";
 import CompanyCard from "./CompanyCard";
 
 const CompaniesGridView = () => {
-  const { items, loading, error } = useSelector((state) => state.companies);
+  const { items, allItems, loading, error } = useSelector(
+    (state) => state.companies
+  );
   const { q } = useSelector((state) => state.filters);
-
-  const searchedItems = useMemo(() => {
-    if (!q) return items;
-
-    const s = q.toLowerCase();
-    return items.filter((c) => JSON.stringify(c).toLowerCase().includes(s));
-  }, [items, q]);
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
   useEffect(() => {
     setPage(1);
-  }, [searchedItems]);
+  }, [q]);
+
+  const searchedItems = useMemo(() => {
+    if (!q.trim()) return items;
+
+    const search = q.toLowerCase();
+
+    return allItems.filter((c) => {
+      return (
+        c.name.toLowerCase().includes(search) ||
+        c.location.toLowerCase().includes(search) ||
+        c.industry.toLowerCase().includes(search) ||
+        c.companySize.toLowerCase().includes(search) ||
+        c.description.toLowerCase().includes(search)
+      );
+    });
+  }, [q, allItems, items]);
 
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * pageSize;
@@ -39,7 +50,7 @@ const CompaniesGridView = () => {
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
-  if (!loading && searchedItems.length === 0)
+  if (!loading && searchedItems.length === 0) {
     return (
       <Typography
         variant="h6"
@@ -47,55 +58,27 @@ const CompaniesGridView = () => {
           textAlign: "center",
           width: "100%",
           mt: 5,
-          height: "40vh",
           color: "text.secondary",
         }}
       >
         No Results Found
       </Typography>
     );
+  }
 
   return (
     <>
-      {/* Responsive GRID */}
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "100%",
-          maxWidth: "1200px",
-          margin: "auto",
-          pb: 2,
-        }}
-      >
-        {paginatedItems.map((company) => (
-          <Grid
-            item
-            key={company.id}
-            sx={{
-              width: {
-                xs: "100%",
-                sm: "45%",
-                md: "30%",
-              },
-            }}
-          >
-            <CompanyCard company={company} />
-          </Grid>
-        ))}
-      </Grid>
-
+      {/* Pagination UI */}
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "flex-end",
-          alignItems: { xs: "stretch", sm: "center" },
+          alignItems: "center",
           mb: 4,
           gap: 2,
         }}
       >
-        <FormControl size="small" sx={{ width: { xs: "100%", sm: "auto" } }}>
+        <FormControl size="small">
           <Select
             value={pageSize}
             onChange={(e) => {
@@ -103,7 +86,6 @@ const CompaniesGridView = () => {
               setPage(1);
             }}
           >
-            <MenuItem value={5}>5 / page</MenuItem>
             <MenuItem value={10}>10 / page</MenuItem>
             <MenuItem value={20}>20 / page</MenuItem>
             <MenuItem value={50}>50 / page</MenuItem>
@@ -113,15 +95,27 @@ const CompaniesGridView = () => {
         <Pagination
           count={totalPages}
           page={page}
-          color="primary"
           onChange={(event, value) => setPage(value)}
-          sx={{
-            "& .MuiPagination-ul": {
-              justifyContent: { xs: "center", sm: "flex-end" },
-            },
-          }}
+          color="primary"
         />
       </Box>
+
+      {/* Grid */}
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          width: "90%",
+          margin: "auto",
+          pb: 2,
+        }}
+      >
+        {paginatedItems.map((company) => (
+          <Grid item xs={12} sm={6} md={4} key={company.id}>
+            <CompanyCard company={company} />
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 };
