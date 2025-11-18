@@ -5,7 +5,15 @@ async function handler(req, res) {
   try {
     const filePath = path.join(process.cwd(), "mock_data.json");
     const raw = await fs.readFile(filePath, "utf8");
+
     const companies = JSON.parse(raw);
+
+    if (!Array.isArray(companies)) {
+      return res.status(500).json({
+        error: "Data format error",
+        detail: "mock_data.json must contain an array",
+      });
+    }
 
     let results = [...companies];
 
@@ -38,7 +46,10 @@ async function handler(req, res) {
 
     res.status(200).json(results);
   } catch (err) {
-    res.status(500).json({ error: "Server error", detail: err.message });
+    res.status(500).json({
+      error: "Server error",
+      detail: err.message,
+    });
   }
 }
 
