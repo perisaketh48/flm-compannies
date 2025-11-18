@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 const initialState = {
   items: [],
   loading: false,
@@ -27,7 +29,7 @@ export const fetchCompanies = (params) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api`, {
+    const response = await axios.get(`${BASE_URL}/companies`, {
       params,
     });
 
