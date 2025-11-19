@@ -102,13 +102,17 @@ const CompaniesGridView = () => {
         container
         spacing={2}
         sx={{
-          width: "90%",
+          width: "100%",
           margin: "auto",
           pb: 2,
         }}
       >
         {paginatedItems.map((company) => (
-          <Grid item key={company.id} sx={{ width: "30%" }}>
+          <Grid
+            item
+            key={company.id}
+            sx={{ width: { xs: "100%", sm: "45%", md: "30%" } }}
+          >
             <CompanyCard company={company} />
           </Grid>
         ))}
