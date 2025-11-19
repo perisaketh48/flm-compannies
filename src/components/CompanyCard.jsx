@@ -28,6 +28,7 @@ const CompanyCard = ({ company }) => {
       sx={{
         borderRadius: 3,
         p: 1,
+        width: "100%",
         bgcolor: "background.paper",
         transition: "0.25s",
         "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
