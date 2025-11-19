@@ -65,6 +65,27 @@ const CompaniesGridView = () => {
 
   return (
     <>
+      {/* Grid */}
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          width: "100%",
+          margin: "auto",
+          pb: 2,
+        }}
+      >
+        {paginatedItems.map((company) => (
+          <Grid
+            item
+            key={company.id}
+            sx={{ width: { xs: "100%", sm: "45%", md: "30%" } }}
+          >
+            <CompanyCard company={company} />
+          </Grid>
+        ))}
+      </Grid>
+
       {/* Pagination UI */}
       <Box
         sx={{
@@ -96,27 +117,6 @@ const CompaniesGridView = () => {
           color="primary"
         />
       </Box>
-
-      {/* Grid */}
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "100%",
-          margin: "auto",
-          pb: 2,
-        }}
-      >
-        {paginatedItems.map((company) => (
-          <Grid
-            item
-            key={company.id}
-            sx={{ width: { xs: "100%", sm: "45%", md: "30%" } }}
-          >
-            <CompanyCard company={company} />
-          </Grid>
-        ))}
-      </Grid>
     </>
   );
 };
