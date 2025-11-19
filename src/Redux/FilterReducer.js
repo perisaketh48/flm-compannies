@@ -6,7 +6,7 @@ const initialState = {
   location: "",
   companySize: "",
   sortBy: "",
-  sortOrder: "",
+  sortOrder: "asc",
 };
 
 const filtersSlice = createSlice({
